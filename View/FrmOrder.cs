@@ -15,6 +15,7 @@ namespace OrderSystem.View
     public partial class FrmOrder : Form
     {
         private readonly ProductController productController = new ProductController();
+        private readonly OrderController orderController = new OrderController();
 
         public FrmOrder()
         {
@@ -74,6 +75,13 @@ namespace OrderSystem.View
                 return;
             }
 
+            // Limit basket to one product
+            if (lvBasket.Items.Count == 1)
+            {
+                MessageBox.Show("You can only order one product at a time.", "Basket Full", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             ListViewItem selectedItem = lvProducts.SelectedItems[0];
             ProductModel product = (ProductModel)selectedItem.Tag;
 
@@ -86,6 +94,38 @@ namespace OrderSystem.View
             {
                 MessageBox.Show("Your basket is empty. Please add products before placing an order.", "Empty Basket", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            // Create order from the product in the basket
+            ListViewItem lvItem = lvBasket.Items[0];
+            ProductModel product = (ProductModel)lvItem.Tag;
+
+            // Create OrderModel instance
+            OrderModel order = new OrderModel
+            {
+                ProductID = product.ProductID,
+                TotalAmount = product.Price
+            };
+
+            // Attempt to create the order
+            try
+            {
+                int affectedRows = orderController.CreateOrder(order);
+
+                // Provide feedback to the user
+                if (affectedRows > 0)
+                {
+                    MessageBox.Show("Order placed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lvBasket.Items.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to place the order. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("An error occurred while placing the order. Please try again later.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

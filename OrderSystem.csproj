@@ -63,9 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Controller\ProductController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Enum\AuthMode.cs" />
+    <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\ProductModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Program.cs" />
