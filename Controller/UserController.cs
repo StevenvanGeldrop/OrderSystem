@@ -54,5 +54,27 @@ namespace OrderSystem.Controller
                 }
             }
         }
+
+        /// <summary>
+        /// Registers a new user with the provided username and password.
+        /// </summary>
+        /// <param name="username">The username of the new user to be registered.</param>
+        /// <param name="password">The password of the new user to be registered.</param>
+        /// <returns>Returns the number of rows affected in the database. A value greater than 0 indicates successful registration.</returns>
+        public static int Register(string username, string password)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO [User] (Username, Password) VALUES (@Username, @Password);";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+                    command.Parameters.AddWithValue("@Password", BCrypt.Net.BCrypt.HashPassword(password));
+
+                    connection.Open();
+                    return command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
