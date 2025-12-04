@@ -18,6 +18,7 @@ namespace OrderSystem.View
 
         public FrmLoginRegister(AuthMode mode)
         {
+            // Constructor to initialize the form with the specified mode (Login or Register)
             InitializeComponent();
             currentMode = mode;
             UpdateForm();
@@ -25,6 +26,7 @@ namespace OrderSystem.View
 
         private void UpdateForm()
         {
+            // Update form title and button text based on mode
             if (currentMode == AuthMode.Login)
             {
                 btnSubmit.Text = "Login";
